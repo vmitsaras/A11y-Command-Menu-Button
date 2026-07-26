@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Status Announcements | A11y Command Menu Button</title>
+    <meta
+      name="description"
+      content="Format polite live-region messages for activated, unavailable, and loading command menu actions while keeping keyboard focus in place."
+    />
+    <meta name="robots" content="noindex,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="A11y Command Menu Button" />
+    <meta
+      property="og:title"
+      content="Status Announcements | A11y Command Menu Button"
+    />
+    <meta
+      property="og:description"
+      content="Format polite live-region messages for activated, unavailable, and loading command menu actions while keeping keyboard focus in place."
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="Status Announcements | A11y Command Menu Button"
+    />
+    <meta
+      name="twitter:description"
+      content="Format polite live-region messages for activated, unavailable, and loading command menu actions while keeping keyboard focus in place."
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebPage",
+            "name": "Status Announcements | A11y Command Menu Button",
+            "description": "Format polite live-region messages for activated, unavailable, and loading command menu actions while keeping keyboard focus in place.",
+            "mainEntity": {
+              "@id": "https://github.com/vmitsaras/a11y-command-menu-button#software"
+            }
+          },
+          {
+            "@type": "SoftwareSourceCode",
+            "@id": "https://github.com/vmitsaras/a11y-command-menu-button#software",
+            "name": "A11y Command Menu Button",
+            "description": "Accessible command menu button behavior for compact application menus.",
+            "codeRepository": "https://github.com/vmitsaras/a11y-command-menu-button",
+            "programmingLanguage": ["TypeScript", "JavaScript"],
+            "runtimePlatform": "Browser",
+            "version": "1.0.0",
+            "license": "https://github.com/vmitsaras/a11y-command-menu-button/blob/main/LICENSE",
+            "keywords": [
+              "accessibility",
+              "a11y",
+              "command menu",
+              "live region",
+              "status announcement",
+              "typescript"
+            ],
+            "sameAs": [
+              "https://github.com/vmitsaras/a11y-command-menu-button",
+              "https://www.npmjs.com/package/a11y-command-menu-button"
+            ],
+            "targetProduct": {
+              "@type": "SoftwareApplication",
+              "name": "Modern web browsers",
+              "applicationCategory": "DeveloperApplication",
+              "operatingSystem": "Any",
+              "runtimePlatform": "Browser"
+            }
+          }
+        ]
+      }
+    </script>
+    <link rel="stylesheet" href="../../dist/styles.css" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module">
+      import { createCommandMenuButton } from "../../dist/index.js";
+
+      const root = document.querySelector("[data-command-menu]");
+      const status = document.querySelector("[data-command-announcement-target]");
+
+      if (root instanceof HTMLElement && status instanceof HTMLElement) {
+        createCommandMenuButton(root, {
+          closeOnSelect: true,
+          typeahead: true,
+          announce: {
+            target: status,
+            formatCommand: ({ item }) =>
+              item.getAttribute("data-command-announcement") || "Command activated.",
+            formatDisabled: ({ item }) =>
+              item.getAttribute("data-command-disabled-announcement") ||
+              item.getAttribute("data-disabled-reason") ||
+              "Command unavailable.",
+            formatLoading: ({ item }) =>
+              item.getAttribute("data-command-loading-announcement") || "Command is still loading."
+          }
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <main class="demo-page">
+      <header class="demo-hero">
+        <p class="demo-hero__eyebrow">Plugin example</p>
+        <h1>Status announcement formatter for command menus</h1>
+        <p>
+          A support team command menu announces activated, unavailable, and loading commands through one
+          persistent polite status target.
+        </p>
+      </header>
+
+      <section class="demo-brief" aria-labelledby="demo-brief-title">
+        <h2 id="demo-brief-title">Scenario</h2>
+        <p>
+          A support agent is triaging a customer case. The command menu contains available actions,
+          actions blocked by missing context, and an action that is still preparing.
+        </p>
+        <p class="demo-goal">
+          User goal: choose an action confidently without losing keyboard position or hearing raw
+          ticket metadata.
+        </p>
+      </section>
+
+      <section class="demo-instructions" aria-labelledby="try-title">
+        <h2 id="try-title">Try it</h2>
+        <ul>
+          <li>Open the Actions menu and choose Assign to me.</li>
+          <li>Choose Request legal review to hear the disabled formatter text.</li>
+          <li>Choose Generate summary to hear the loading formatter text.</li>
+          <li>Use Arrow keys, Home, End, Enter, Space, Escape, and typeahead letters.</li>
+        </ul>
+      </section>
+
+      <section class="demo-stage" aria-labelledby="example-title">
+        <div class="demo-stage__header">
+          <h2 id="example-title">Example</h2>
+          <p>Visible status output mirrors what the polite live region receives.</p>
+        </div>
+
+        <div class="demo-workspace">
+          <article class="demo-ticket" aria-labelledby="ticket-title">
+            <div>
+              <p class="demo-ticket__meta">Case QA-4182</p>
+              <h3 id="ticket-title">Keyboard access review request</h3>
+              <p>
+                Customer needs a concise next step. Some commands are blocked until a tier is
+                selected, and one async summary is still preparing.
+              </p>
+            </div>
+            <dl class="demo-ticket__facts">
+              <div>
+                <dt>Priority</dt>
+                <dd>High</dd>
+              </div>
+              <div>
+                <dt>Status</dt>
+                <dd>Waiting on triage</dd>
+              </div>
+            </dl>
+          </article>
+
+          <div class="a11y-command-menu-button demo-command-menu" data-command-menu>
+            <button
+              id="triage-actions-trigger"
+              type="button"
+              class="a11y-command-menu-button__trigger demo-command-menu__trigger"
+              data-command-trigger
+              aria-haspopup="menu"
+              aria-expanded="false"
+              aria-controls="triage-actions-menu"
+            >
+              <span aria-hidden="true">+</span>
+              Actions
+            </button>
+
+            <p
+              id="triage-status"
+              class="demo-status"
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+              data-command-announcement-target
+            >
+              Open the Actions menu to choose a command.
+            </p>
+
+            <div
+              id="triage-actions-menu"
+              class="a11y-command-menu-button__panel"
+              data-command-menu-panel
+              role="menu"
+              aria-labelledby="triage-actions-trigger"
+              hidden
+            >
+              <ul class="a11y-command-menu-button__list" role="none">
+                <li role="none">
+                  <button
+                    type="button"
+                    class="a11y-command-menu-button__item"
+                    data-command-item
+                    data-command-id="assign-to-me"
+                    data-command-announcement="Assign to me activated."
+                    role="menuitem"
+                  >
+                    <span class="a11y-command-menu-button__item-icon" aria-hidden="true">A</span>
+                    <span class="a11y-command-menu-button__item-content">
+                      <span class="a11y-command-menu-button__item-label">Assign to me</span>
+                      <span class="a11y-command-menu-button__item-meta">Claim the case for follow-up</span>
+                    </span>
+                  </button>
+                </li>
+                <li role="none">
+                  <button
+                    type="button"
+                    class="a11y-command-menu-button__item"
+                    data-command-item
+                    data-command-id="generate-summary"
+                    data-command-loading
+                    data-command-loading-announcement="The summary is still being prepared. Try again in a moment."
+                    role="menuitem"
+                    aria-busy="true"
+                  >
+                    <span class="a11y-command-menu-button__item-icon" aria-hidden="true">S</span>
+                    <span class="a11y-command-menu-button__item-content">
+                      <span class="a11y-command-menu-button__item-label">Generate summary</span>
+                      <span class="a11y-command-menu-button__item-meta">Preparing the latest transcript</span>
+                    </span>
+                  </button>
+                </li>
+                <li role="none">
+                  <button
+                    type="button"
+                    class="a11y-command-menu-button__item"
+                    data-command-item
+                    data-command-id="request-legal-review"
+                    data-command-disabled-announcement="Legal review is available after a customer tier is selected."
+                    data-disabled-reason="Legal review is available after a customer tier is selected."
+                    role="menuitem"
+                    aria-disabled="true"
+                  >
+                    <span class="a11y-command-menu-button__item-icon" aria-hidden="true">L</span>
+                    <span class="a11y-command-menu-button__item-content">
+                      <span class="a11y-command-menu-button__item-label">Request legal review</span>
+                      <span class="a11y-command-menu-button__item-meta">Requires customer tier first</span>
+                    </span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-code" aria-labelledby="code-title">
+        <h2 id="code-title">Code snippets</h2>
+        <div class="demo-snippet-grid">
+          <article class="demo-snippet">
+            <h3>Live region target</h3>
+            <pre><code>&lt;p
+  id=&quot;triage-status&quot;
+  role=&quot;status&quot;
+  aria-live=&quot;polite&quot;
+  aria-atomic=&quot;true&quot;
+  data-command-announcement-target
+&gt;&lt;/p&gt;</code></pre>
+          </article>
+
+          <article class="demo-snippet">
+            <h3>Formatter setup</h3>
+            <pre><code>createCommandMenuButton(root, {
+  announce: {
+    target: status,
+    formatCommand: ({ item }) =>
+      item.getAttribute(&quot;data-command-announcement&quot;) ||
+      &quot;Command activated.&quot;,
+    formatDisabled: ({ item }) =>
+      item.getAttribute(&quot;data-command-disabled-announcement&quot;) ||
+      &quot;Command unavailable.&quot;,
+    formatLoading: ({ item }) =>
+      item.getAttribute(&quot;data-command-loading-announcement&quot;) ||
+      &quot;Command is still loading.&quot;
+  }
+});</code></pre>
+          </article>
+        </div>
+      </section>
+
+      <section class="demo-notes" aria-labelledby="a11y-title">
+        <h2 id="a11y-title">Accessibility notes</h2>
+        <ul>
+          <li>The trigger is a real button with a visible text label and menu relationship attributes.</li>
+          <li>Menu items are real buttons with <code>role="menuitem"</code> for an application command menu.</li>
+          <li>The status target is persistent, polite, atomic, and outside the hidden menu panel.</li>
+          <li>Disabled and loading commands remain arrow-key discoverable; announcements never move focus.</li>
+          <li>Repeating the same blocked action requests the same polite status message again.</li>
+          <li>Announcement copy is curated and avoids raw command IDs, file names, or customer data.</li>
+          <li>Motion comes from the package CSS and respects reduced-motion preferences.</li>
+          <li>Manual screen reader checks are still needed for VoiceOver, NVDA, or JAWS release confidence.</li>
+        </ul>
+      </section>
+
+      <section class="demo-developer-notes" aria-labelledby="developer-title">
+        <h2 id="developer-title">Developer notes</h2>
+        <ul>
+          <li>Root selector: <code>[data-command-menu]</code>.</li>
+          <li>Trigger selector: <code>[data-command-trigger]</code>.</li>
+          <li>Panel selector: <code>[data-command-menu-panel]</code>.</li>
+          <li>Command selector: <code>[data-command-item]</code> with stable <code>data-command-id</code> values.</li>
+          <li>Options used: <code>typeahead: true</code>, <code>closeOnSelect: true</code>, and <code>announce</code> with all three formatters.</li>
+          <li>Limitations: automated tests can verify live-region text updates, not actual assistive technology speech.</li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="demo-footer" data-demo-footer>
+      <div class="demo-footer__inner">
+        <div class="demo-footer__brand">
+          <p class="demo-footer__eyebrow">Accessibility plugin demo</p>
+          <p class="demo-footer__credit">
+            <span class="demo-footer__plugin">A11y Command Menu Button</span>
+            <span class="demo-footer__separator" aria-hidden="true">&middot;</span>
+            Built by
+            <a class="demo-footer__link" href="https://github.com/vmitsaras/">Vasileios Mitsaras</a>
+          </p>
+          <p class="demo-footer__meta">
+            <span>a11y-command-menu-button</span>
+            <span class="demo-footer__separator" aria-hidden="true">&middot;</span>
+            <span>MIT License</span>
+          </p>
+        </div>
+
+        <nav class="demo-footer__nav" aria-label="Project links">
+          <ul class="demo-footer__links">
+            <li class="demo-footer__item">
+              <a class="demo-footer__link" href="https://github.com/vmitsaras/a11y-command-menu-button">GitHub repository</a>
+            </li>
+            <li class="demo-footer__item">
+              <a class="demo-footer__link" href="https://www.npmjs.com/package/a11y-command-menu-button">npm package</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

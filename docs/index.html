@@ -1,0 +1,1842 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Accessible Command Menu Demo | A11y Command Menu Button</title>
+    <meta
+      name="description"
+      content="Test keyboard navigation, disabled and loading states, submenus, mobile sheets, portal rendering, typeahead, and focus restoration in a live command menu."
+    />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://vmitsaras.github.io/A11y-Command-Menu-Button/" />
+    <meta name="theme-color" content="#050505" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="A11y Command Menu Button" />
+    <meta
+      property="og:title"
+      content="Accessible Command Menu Demo | A11y Command Menu Button"
+    />
+    <meta
+      property="og:description"
+      content="Test keyboard navigation, disabled and loading states, submenus, mobile sheets, portal rendering, typeahead, and focus restoration in a live command menu."
+    />
+    <meta property="og:url" content="https://vmitsaras.github.io/A11y-Command-Menu-Button/" />
+    <meta
+      property="og:image"
+      content="https://vmitsaras.github.io/A11y-Command-Menu-Button/social-preview.png"
+    />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="640" />
+    <meta
+      property="og:image:alt"
+      content="A11y Command Menu Button — accessible keyboard-first command menus for compact web applications."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Accessible Command Menu Demo | A11y Command Menu Button"
+    />
+    <meta
+      name="twitter:description"
+      content="Test keyboard navigation, disabled and loading states, submenus, mobile sheets, portal rendering, typeahead, and focus restoration in a live command menu."
+    />
+    <meta
+      name="twitter:image"
+      content="https://vmitsaras.github.io/A11y-Command-Menu-Button/social-preview.png"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="A11y Command Menu Button — accessible keyboard-first command menus for compact web applications."
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebPage",
+            "@id": "https://vmitsaras.github.io/A11y-Command-Menu-Button/#webpage",
+            "url": "https://vmitsaras.github.io/A11y-Command-Menu-Button/",
+            "name": "Accessible Command Menu Demo | A11y Command Menu Button",
+            "description": "Test keyboard navigation, disabled and loading states, submenus, mobile sheets, portal rendering, typeahead, and focus restoration in a live command menu.",
+            "image": "https://vmitsaras.github.io/A11y-Command-Menu-Button/social-preview.png",
+            "mainEntity": {
+              "@id": "https://vmitsaras.github.io/A11y-Command-Menu-Button/#software"
+            }
+          },
+          {
+            "@type": "SoftwareSourceCode",
+            "@id": "https://vmitsaras.github.io/A11y-Command-Menu-Button/#software",
+            "name": "A11y Command Menu Button",
+            "description": "Accessible command menu button behavior for compact application menus.",
+            "codeRepository": "https://github.com/vmitsaras/A11y-Command-Menu-Button",
+            "programmingLanguage": "TypeScript",
+            "runtimePlatform": "Browser",
+            "version": "1.0.0",
+            "license": "https://github.com/vmitsaras/A11y-Command-Menu-Button/blob/main/LICENSE",
+            "image": "https://vmitsaras.github.io/A11y-Command-Menu-Button/social-preview.png",
+            "keywords": [
+              "accessibility",
+              "a11y",
+              "command menu",
+              "menu button",
+              "keyboard navigation",
+              "typescript"
+            ],
+            "featureList": [
+              "Roving keyboard focus",
+              "One-level submenus",
+              "Disabled and loading command states",
+              "Optional typeahead",
+              "Responsive mobile sheet mode",
+              "Predictable focus restoration"
+            ],
+            "sameAs": [
+              "https://github.com/vmitsaras/A11y-Command-Menu-Button"
+            ],
+            "targetProduct": {
+              "@type": "SoftwareApplication",
+              "name": "Modern web browsers",
+              "applicationCategory": "DeveloperApplication",
+              "operatingSystem": "Any",
+              "runtimePlatform": "Browser"
+            }
+          }
+        ]
+      }
+    </script>
+    <link rel="stylesheet" href="./dist/styles.css" />
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        --demo-bg: #050505;
+        --demo-ink: #f7f7f4;
+        --demo-muted: #b6b4b0;
+        --demo-soft: #8d8b87;
+        --demo-panel: #171717;
+        --demo-panel-strong: #232323;
+        --demo-border: rgb(255 255 255 / 0.16);
+        --demo-border-soft: rgb(255 255 255 / 0.1);
+        --demo-accent: #f7f7f4;
+        --demo-accent-strong: #ffffff;
+        --demo-coral: #d9d4ca;
+        --demo-gold: #f3d27a;
+        --demo-code-bg: #0f0f0f;
+        --demo-code-ink: #f7f7f4;
+        --demo-shadow: 0 1.5rem 5rem rgb(0 0 0 / 0.42);
+        --demo-radius: 1.25rem;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(circle at 50% 14rem, rgb(255 255 255 / 0.08), transparent 22rem),
+          linear-gradient(180deg, rgb(255 255 255 / 0.035), transparent 20rem),
+          var(--demo-bg);
+        color: var(--demo-ink);
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      a {
+        color: var(--demo-ink);
+        text-underline-offset: 0.18em;
+      }
+
+      a:hover {
+        color: var(--demo-muted);
+      }
+
+      code,
+      kbd {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      }
+
+      kbd {
+        display: inline-block;
+        padding: 0.08rem 0.35rem;
+        border: 1px solid var(--demo-border);
+        border-radius: 0.5rem;
+        background: var(--demo-panel-strong);
+        color: var(--demo-ink);
+        font-size: 0.85em;
+        font-weight: 700;
+        line-height: 1.4;
+      }
+
+      pre {
+        max-inline-size: 100%;
+        overflow-x: auto;
+        margin: 0;
+        padding: 1rem;
+        border-radius: var(--demo-radius);
+        background: var(--demo-code-bg);
+        color: var(--demo-code-ink);
+        line-height: 1.6;
+      }
+
+      pre code {
+        color: inherit;
+        white-space: pre;
+      }
+
+      table {
+        inline-size: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 0.75rem;
+        border-block-end: 1px solid var(--demo-border-soft);
+        text-align: start;
+        vertical-align: top;
+      }
+
+      th {
+        color: var(--demo-muted);
+        font-size: 0.78rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      :focus-visible {
+        outline: 3px solid var(--demo-accent);
+        outline-offset: 3px;
+      }
+
+      .skip-link {
+        position: absolute;
+        inset-block-start: 0.75rem;
+        inset-inline-start: 0.75rem;
+        z-index: 10000;
+        padding: 0.65rem 0.9rem;
+        border-radius: var(--demo-radius);
+        background: var(--demo-accent);
+        color: var(--demo-bg);
+        transform: translateY(-140%);
+      }
+
+      .skip-link:focus {
+        transform: translateY(0);
+      }
+
+      .sr-only {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .demo-page {
+        min-block-size: 100vh;
+      }
+
+      .demo-container {
+        inline-size: min(calc(100% - 2rem), 72rem);
+        margin-inline: auto;
+      }
+
+      .demo-header {
+        padding-block: clamp(3rem, 10vw, 8rem) clamp(1rem, 4vw, 2.5rem);
+      }
+
+      .demo-header__content {
+        display: grid;
+        justify-items: center;
+        gap: 1.25rem;
+        max-inline-size: 64rem;
+        text-align: center;
+      }
+
+      .demo-eyebrow {
+        margin: 0;
+        color: var(--demo-soft);
+        font-size: 0.78rem;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .demo-header h1 {
+        max-inline-size: 16ch;
+        margin: 0;
+        font-size: clamp(2.5rem, 8vw, 5.5rem);
+        font-weight: 620;
+        letter-spacing: 0;
+        line-height: 1.02;
+        text-wrap: balance;
+      }
+
+      .demo-header__intro {
+        max-inline-size: 48rem;
+        margin: 0;
+        color: var(--demo-muted);
+        font-size: clamp(1.05rem, 2vw, 1.3rem);
+        line-height: 1.7;
+      }
+
+      .demo-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .demo-button,
+      .demo-link-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-block-size: 2.75rem;
+        padding: 0.65rem 0.95rem;
+        border: 1px solid var(--demo-border);
+        border-radius: 999px;
+        background: var(--demo-accent);
+        color: var(--demo-bg);
+        font-weight: 800;
+        line-height: 1.2;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .demo-button:hover,
+      .demo-link-button:hover {
+        background: var(--demo-accent-strong);
+        color: var(--demo-bg);
+      }
+
+      .demo-link-button--secondary {
+        border-color: var(--demo-border);
+        background: var(--demo-panel);
+        color: var(--demo-ink);
+      }
+
+      .demo-link-button--secondary:hover {
+        border-color: var(--demo-border);
+        background: var(--demo-panel-strong);
+        color: var(--demo-ink);
+      }
+
+      .demo-facts {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1px;
+        margin-block: clamp(1.25rem, 4vw, 2.5rem) 0;
+        overflow: hidden;
+        border: 1px solid var(--demo-border);
+        border-radius: var(--demo-radius);
+        background: var(--demo-border-soft);
+      }
+
+      .demo-facts div {
+        min-inline-size: 0;
+        padding: 1rem;
+        background: rgb(255 255 255 / 0.045);
+      }
+
+      .demo-facts dt {
+        color: var(--demo-muted);
+        font-size: 0.75rem;
+        font-weight: 900;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .demo-facts dd {
+        margin: 0.35rem 0 0;
+        font-weight: 800;
+        overflow-wrap: anywhere;
+      }
+
+      .demo-section {
+        padding-block: clamp(2rem, 6vw, 4.5rem);
+        border-block-start: 1px solid var(--demo-border-soft);
+      }
+
+      .demo-section__header {
+        display: grid;
+        gap: 0.55rem;
+        max-inline-size: 48rem;
+        margin-block-end: 1.35rem;
+      }
+
+      .demo-section__eyebrow {
+        margin: 0;
+        color: var(--demo-soft);
+        font-size: 0.76rem;
+        font-weight: 900;
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+      }
+
+      .demo-section h2 {
+        margin: 0;
+        font-size: clamp(1.65rem, 4vw, 2.65rem);
+        letter-spacing: 0;
+        line-height: 1.08;
+      }
+
+      .demo-section h3 {
+        margin-block: 0 0.55rem;
+        font-size: 1rem;
+        letter-spacing: 0;
+      }
+
+      .demo-section p {
+        margin-block: 0;
+        color: var(--demo-muted);
+        line-height: 1.65;
+      }
+
+      .demo-list {
+        display: grid;
+        gap: 0.6rem;
+        margin-block: 0;
+        padding-inline-start: 1.15rem;
+        color: var(--demo-muted);
+        line-height: 1.6;
+      }
+
+      .demo-stage {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
+        gap: 1rem;
+        align-items: start;
+        min-inline-size: 0;
+      }
+
+      .demo-preview,
+      .demo-panel,
+      .demo-doc,
+      .demo-state-output {
+        min-inline-size: 0;
+        border: 1px solid var(--demo-border);
+        border-radius: var(--demo-radius);
+        background: rgb(255 255 255 / 0.045);
+        box-shadow: var(--demo-shadow);
+      }
+
+      .demo-preview {
+        min-block-size: 30rem;
+        padding: clamp(1rem, 4vw, 2.5rem);
+      }
+
+      .demo-panel,
+      .demo-doc,
+      .demo-state-output {
+        padding: 1rem;
+      }
+
+      .demo-preview__surface {
+        display: grid;
+        align-content: center;
+        justify-items: center;
+        min-block-size: 25rem;
+        gap: clamp(1.25rem, 4vw, 2.25rem);
+        padding: clamp(1rem, 4vw, 2rem);
+        border: 0;
+        border-radius: calc(var(--demo-radius) + 0.75rem);
+        background:
+          radial-gradient(circle at 50% 78%, rgb(255 255 255 / 0.06), transparent 22rem),
+          #050505;
+      }
+
+      .demo-composer-label {
+        display: grid;
+        justify-items: center;
+        gap: 0.7rem;
+        max-inline-size: 46rem;
+        text-align: center;
+      }
+
+      .demo-composer-label strong {
+        color: var(--demo-ink);
+        font-size: clamp(2rem, 5vw, 4rem);
+        font-weight: 620;
+        line-height: 1.04;
+        text-wrap: balance;
+      }
+
+      .demo-composer-label span {
+        max-inline-size: 38rem;
+        color: var(--demo-muted);
+        font-size: clamp(1rem, 2vw, 1.15rem);
+        line-height: 1.55;
+        text-wrap: balance;
+      }
+
+      .a11y-command-menu-button {
+        --a11y-command-menu-bg: #171717;
+        --a11y-command-menu-color: #f7f7f4;
+        --a11y-command-menu-muted-color: #b6b4b0;
+        --a11y-command-menu-border-color: rgb(255 255 255 / 0.22);
+        --a11y-command-menu-item-border-color: rgb(255 255 255 / 0.12);
+        --a11y-command-menu-item-active-bg: rgb(255 255 255 / 0.1);
+        --a11y-command-menu-focus-ring: 3px solid #ffffff;
+        --a11y-command-menu-radius: 1.25rem;
+        --a11y-command-menu-item-radius: 0.875rem;
+        --a11y-command-menu-min-width: min(22rem, calc(100vw - 2rem));
+        --a11y-command-menu-max-width: min(25rem, calc(100vw - 2rem));
+
+        display: grid;
+        justify-items: center;
+        gap: 0.75rem;
+        inline-size: min(100%, 56rem);
+      }
+
+      .demo-composer {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: clamp(0.75rem, 2vw, 1.5rem);
+        inline-size: 100%;
+        min-block-size: clamp(4.75rem, 8vw, 6.25rem);
+        padding: clamp(0.75rem, 1.8vw, 1rem) clamp(0.875rem, 2.3vw, 1.5rem);
+        border: 1px solid var(--demo-border);
+        border-radius: 999px;
+        background: var(--demo-panel-strong);
+        box-shadow: 0 1.5rem 5rem rgb(0 0 0 / 0.42);
+        transition:
+          background 160ms cubic-bezier(0.2, 0, 0.2, 1),
+          border-color 160ms cubic-bezier(0.2, 0, 0.2, 1);
+      }
+
+      .a11y-command-menu-button:focus-within .demo-composer,
+      .demo-composer:hover {
+        border-color: var(--demo-border);
+        background: #292929;
+      }
+
+      .a11y-command-menu-button__trigger {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        inline-size: clamp(3rem, 5vw, 4rem);
+        block-size: clamp(3rem, 5vw, 4rem);
+        min-inline-size: 3rem;
+        min-block-size: 3rem;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--demo-ink);
+        font-size: clamp(2rem, 4vw, 2.75rem);
+        font-weight: 300;
+        line-height: 1;
+        cursor: pointer;
+        transition:
+          background 160ms cubic-bezier(0.2, 0, 0.2, 1),
+          transform 160ms cubic-bezier(0.2, 0, 0.2, 1);
+      }
+
+      .a11y-command-menu-button__trigger:hover,
+      .a11y-command-menu-button__trigger[aria-expanded="true"] {
+        background: rgb(255 255 255 / 0.1);
+      }
+
+      .a11y-command-menu-button__trigger:active {
+        transform: scale(0.96);
+      }
+
+      .demo-composer__input {
+        min-inline-size: 0;
+        inline-size: 100%;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: var(--demo-ink);
+        font-size: clamp(1.25rem, 3vw, 2rem);
+        line-height: 1.25;
+      }
+
+      .demo-composer__input::placeholder {
+        color: var(--demo-muted);
+        opacity: 1;
+      }
+
+      .demo-status-line {
+        min-block-size: 2.6rem;
+        padding: 0.7rem 0.8rem;
+        border: 1px solid var(--demo-border-soft);
+        border-radius: 1rem;
+        background: rgb(255 255 255 / 0.06);
+        color: var(--demo-muted);
+        font-weight: 700;
+      }
+
+      .demo-state-grid {
+        display: grid;
+        gap: 0.6rem;
+        margin: 0;
+      }
+
+      .demo-toggle {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 0.65rem;
+        align-items: start;
+        padding: 0.75rem;
+        border: 1px solid var(--demo-border-soft);
+        border-radius: var(--demo-radius);
+        background: rgb(255 255 255 / 0.04);
+      }
+
+      .demo-toggle input {
+        inline-size: 1.15rem;
+        block-size: 1.15rem;
+        margin-block-start: 0.2rem;
+        accent-color: var(--demo-accent);
+      }
+
+      .demo-toggle strong,
+      .demo-toggle span span {
+        display: block;
+      }
+
+      .demo-toggle span span {
+        margin-block-start: 0.2rem;
+        color: var(--demo-muted);
+        font-size: 0.92rem;
+        line-height: 1.45;
+      }
+
+      .demo-state-output {
+        margin-block-start: 0.75rem;
+        box-shadow: none;
+      }
+
+      .demo-state-output p {
+        color: var(--demo-muted);
+        font-size: 0.95rem;
+      }
+
+      .demo-walkthrough {
+        display: grid;
+        grid-template-columns: minmax(0, 0.7fr) minmax(0, 1fr);
+        gap: 1rem;
+        align-items: start;
+        min-inline-size: 0;
+      }
+
+      .demo-steps {
+        display: grid;
+        gap: 0.65rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .demo-steps li {
+        display: grid;
+        grid-template-columns: 2rem minmax(0, 1fr);
+        gap: 0.65rem;
+        padding: 0.75rem;
+        border: 1px solid var(--demo-border-soft);
+        border-radius: var(--demo-radius);
+        background: rgb(255 255 255 / 0.04);
+      }
+
+      .demo-steps li[aria-current="step"] {
+        border-color: var(--demo-border);
+        box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.08);
+      }
+
+      .demo-step-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        inline-size: 2rem;
+        block-size: 2rem;
+        border-radius: 999px;
+        background: var(--demo-accent);
+        color: var(--demo-bg);
+        font-weight: 900;
+      }
+
+      .demo-steps p {
+        color: var(--demo-muted);
+      }
+
+      .demo-steps strong {
+        display: block;
+        color: var(--demo-ink);
+      }
+
+      .demo-code-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .demo-doc-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .demo-code-grid > *,
+      .demo-doc-grid > *,
+      .demo-stage > *,
+      .demo-walkthrough > * {
+        min-inline-size: 0;
+      }
+
+      .demo-table-wrap {
+        margin-top: 1rem;
+        max-inline-size: 100%;
+        min-inline-size: 0;
+        overflow-x: auto;
+        border: 1px solid var(--demo-border);
+        border-radius: var(--demo-radius);
+        background: var(--demo-panel);
+      }
+
+      .demo-footer {
+        --demo-footer-background: var(--demo-panel);
+        --demo-footer-color: var(--demo-ink);
+        --demo-footer-muted-color: var(--demo-muted);
+        --demo-footer-link-color: var(--demo-ink);
+        --demo-footer-border-color: var(--demo-border);
+        --demo-footer-focus-color: var(--demo-gold);
+        --demo-footer-radius: var(--demo-radius);
+        --demo-footer-space: clamp(1rem, 2vw, 1.5rem);
+
+        margin-block-start: clamp(3rem, 8vw, 6rem);
+        padding: var(--demo-footer-space);
+        border: 1px solid var(--demo-footer-border-color);
+        border-radius: var(--demo-footer-radius);
+        background: var(--demo-footer-background);
+        color: var(--demo-footer-color);
+      }
+
+      .demo-footer__inner {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem 2rem;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .demo-footer__brand {
+        display: grid;
+        gap: 0.35rem;
+      }
+
+      .demo-footer__eyebrow,
+      .demo-footer__credit,
+      .demo-footer__meta {
+        margin: 0;
+      }
+
+      .demo-footer__eyebrow,
+      .demo-footer__meta {
+        color: var(--demo-footer-muted-color);
+        font-size: 0.875rem;
+        line-height: 1.5;
+      }
+
+      .demo-footer__credit {
+        line-height: 1.5;
+      }
+
+      .demo-footer__plugin {
+        font-weight: 700;
+      }
+
+      .demo-footer__links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .demo-footer__link {
+        color: var(--demo-footer-link-color);
+        text-decoration-thickness: 0.08em;
+        text-underline-offset: 0.2em;
+      }
+
+      .demo-footer__link:hover {
+        color: var(--demo-footer-muted-color);
+        text-decoration-thickness: 0.15em;
+      }
+
+      .demo-footer__link:focus-visible {
+        outline: 3px solid var(--demo-footer-focus-color);
+        outline-offset: 0.25rem;
+        border-radius: 0.25rem;
+      }
+
+      .demo-footer__separator {
+        margin-inline: 0.35rem;
+      }
+
+      @media (max-width: 56rem) {
+        .demo-facts,
+        .demo-stage,
+        .demo-walkthrough,
+        .demo-code-grid,
+        .demo-doc-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 42rem) {
+        .demo-container {
+          inline-size: min(calc(100% - 1rem), 72rem);
+        }
+
+        .demo-header {
+          padding-block-start: 1.5rem;
+        }
+
+        .demo-actions {
+          align-items: stretch;
+          flex-direction: column;
+        }
+
+        .demo-button,
+        .demo-link-button {
+          inline-size: 100%;
+        }
+
+        .demo-preview {
+          padding: 0.75rem;
+        }
+
+        .demo-preview__surface {
+          min-block-size: 24rem;
+          padding: 0.75rem;
+        }
+
+        .demo-composer {
+          min-block-size: 4.25rem;
+          border-radius: 2rem;
+        }
+
+        .a11y-command-menu-button__trigger {
+          inline-size: 3rem;
+          block-size: 3rem;
+          font-size: 2rem;
+        }
+
+        .demo-composer__input {
+          font-size: 1.125rem;
+        }
+
+        .demo-footer__inner,
+        .demo-footer__links {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+          transition-duration: 0.001ms !important;
+        }
+      }
+
+      @media (forced-colors: active) {
+        .demo-preview,
+        .demo-panel,
+        .demo-doc,
+        .demo-state-output,
+        .demo-facts,
+        .demo-toggle,
+        .demo-steps li,
+        .demo-table-wrap {
+          border-color: CanvasText;
+          background: Canvas;
+          color: CanvasText;
+          box-shadow: none;
+        }
+
+        .demo-footer {
+          border-color: CanvasText;
+          background: Canvas;
+          color: CanvasText;
+        }
+
+        .demo-footer__link {
+          color: LinkText;
+        }
+
+        .demo-button,
+        .demo-link-button,
+        .a11y-command-menu-button__trigger,
+        .demo-step-number {
+          border: 1px solid ButtonText;
+          background: ButtonFace;
+          color: ButtonText;
+        }
+      }
+    </style>
+    <script type="module">
+      import { COMMAND_MENU_BUTTON_EVENTS, createCommandMenuButton } from "./dist/index.js";
+
+      const root = document.querySelector("[data-command-menu]");
+      const trigger = document.querySelector("[data-command-trigger]");
+      const uploadItem = document.querySelector("[data-command-id='add-files']");
+      const uploadMeta = document.querySelector("[data-upload-meta]");
+      const templateTrigger = document.querySelector("[data-command-id='insert-template']");
+      const templateMeta = document.querySelector("[data-template-meta]");
+      const extractItem = document.querySelector("[data-command-id='extract-text']");
+      const extractMeta = document.querySelector("[data-extract-meta]");
+      const status = document.querySelector("[data-command-status-message]");
+      const stateSummary = document.querySelector("[data-state-summary]");
+      const startWalkthroughButton = document.querySelector("[data-start-walkthrough]");
+      const walkthroughStatus = document.querySelector("[data-walkthrough-status]");
+      const stateControls = Array.from(document.querySelectorAll("[data-state-control]"));
+      const walkthroughSteps = Array.from(document.querySelectorAll("[data-walkthrough-step]"));
+      const mobileQuery = window.matchMedia?.("(max-width: 40rem)");
+
+      let instance;
+      const state = {
+        disableExtract: true,
+        loadingUpload: false,
+        disableSubmenu: false,
+        mobileSheet: true,
+        portal: false
+      };
+
+      function setStatus(message) {
+        if (status) {
+          status.textContent = message;
+        }
+      }
+
+      function setWalkthroughStep(name, message) {
+        walkthroughSteps.forEach((step) => {
+          if (step.dataset.walkthroughStep === name) {
+            step.setAttribute("aria-current", "step");
+          } else {
+            step.removeAttribute("aria-current");
+          }
+        });
+
+        if (walkthroughStatus && message) {
+          walkthroughStatus.textContent = message;
+        }
+      }
+
+      function getOptions() {
+        return {
+          closeOnSelect: true,
+          hoverSubmenus: true,
+          mobileMode: state.mobileSheet ? "sheet" : "menu",
+          portal: state.portal,
+          typeahead: true,
+          announce:
+            status instanceof HTMLElement
+              ? {
+                  target: status,
+                  formatCommand: ({ item }) =>
+                    item.getAttribute("data-command-announcement") || "Command activated.",
+                  formatDisabled: ({ item }) =>
+                    item.getAttribute("data-command-disabled-announcement") ||
+                    item.dataset.disabledReason ||
+                    "That command is unavailable right now.",
+                  formatLoading: ({ item }) =>
+                    item.getAttribute("data-command-loading-announcement") ||
+                    "That command is still loading."
+                }
+              : false
+        };
+      }
+
+      function describeLayerMode() {
+        const sheetActive = state.mobileSheet && Boolean(mobileQuery?.matches);
+        const sheetText = sheetActive
+          ? "The menu is using bottom-sheet positioning in this viewport."
+          : state.mobileSheet
+            ? "Mobile sheet mode is on and appears when the viewport is 40rem wide or narrower."
+            : "Mobile sheet mode is off, so the menu keeps floating placement on narrow screens.";
+        const portalText = state.portal
+          ? "Portal mode is on, so menu layers are moved to document.body while open."
+          : "Portal mode is off, so layers stay with the component root.";
+
+        return `${sheetText} ${portalText}`;
+      }
+
+      function updateStateSummary() {
+        if (!stateSummary) {
+          return;
+        }
+
+        const parts = [
+          state.loadingUpload
+            ? "Add files is marked busy with aria-busy."
+            : "Add files is ready.",
+          state.disableSubmenu
+            ? "Template submenu is aria-disabled and will not open."
+            : "Template submenu can open with ArrowRight or pointer.",
+          state.disableExtract
+            ? "Extract text is aria-disabled but remains keyboard discoverable."
+            : "Extract text is enabled.",
+          describeLayerMode()
+        ];
+
+        stateSummary.textContent = parts.join(" ");
+      }
+
+      function setDisabled(item, disabled, reason) {
+        if (!(item instanceof HTMLElement)) {
+          return;
+        }
+
+        if (disabled) {
+          item.setAttribute("aria-disabled", "true");
+          item.classList.add("is-disabled");
+          item.dataset.disabledReason = reason;
+        } else {
+          item.removeAttribute("aria-disabled");
+          item.classList.remove("is-disabled");
+          delete item.dataset.disabledReason;
+        }
+      }
+
+      function applyItemStates() {
+        if (uploadItem instanceof HTMLElement) {
+          if (state.loadingUpload) {
+            uploadItem.setAttribute("aria-busy", "true");
+            uploadItem.setAttribute("data-command-loading", "");
+          } else {
+            uploadItem.removeAttribute("aria-busy");
+            uploadItem.removeAttribute("data-command-loading");
+          }
+        }
+
+        if (uploadMeta) {
+          uploadMeta.textContent = state.loadingUpload
+            ? "Busy; turn off Loading command to activate"
+            : "Upload a local asset into the composer";
+        }
+
+        setDisabled(
+          templateTrigger,
+          state.disableSubmenu,
+          "Templates are unavailable during workspace sync. Turn off Disabled submenu to try them."
+        );
+
+        if (templateMeta) {
+          templateMeta.textContent = state.disableSubmenu
+            ? "Unavailable during workspace sync"
+            : "Open a one-level submenu";
+        }
+
+        setDisabled(
+          extractItem,
+          state.disableExtract,
+          "Extract text needs an uploaded image or PDF. Turn off Disabled command to test it in this demo."
+        );
+
+        if (extractMeta) {
+          extractMeta.textContent = state.disableExtract
+            ? "Upload an image or PDF first"
+            : "Ready after upload";
+        }
+
+        updateStateSummary();
+      }
+
+      function initializeMenu({ announce = false } = {}) {
+        if (!(root instanceof HTMLElement)) {
+          return;
+        }
+
+        const wasOpen = trigger?.getAttribute("aria-expanded") === "true";
+        instance?.destroy();
+        instance = createCommandMenuButton(root, getOptions());
+        applyItemStates();
+
+        if (wasOpen) {
+          instance.open({ focus: false });
+        }
+
+        if (announce) {
+          setStatus(`Demo options updated. ${describeLayerMode()}`);
+        }
+      }
+
+      function getCommandItem(target) {
+        if (!(target instanceof Element)) {
+          return null;
+        }
+
+        return target.closest("[data-command-item]");
+      }
+
+      function itemBelongsToDemo(item) {
+        return (
+          item instanceof HTMLElement &&
+          (root?.contains(item) ||
+            Boolean(item.closest("#composer-command-menu")) ||
+            Boolean(item.closest("#template-submenu")))
+        );
+      }
+
+      if (root instanceof HTMLElement) {
+        initializeMenu();
+        setWalkthroughStep("trigger", "Start by moving focus to the command menu trigger.");
+
+        stateControls.forEach((control) => {
+          if (!(control instanceof HTMLInputElement)) {
+            return;
+          }
+
+          const stateName = control.dataset.stateControl;
+          control.checked = Boolean(state[stateName]);
+
+          control.addEventListener("change", () => {
+            state[stateName] = control.checked;
+
+            if (stateName === "mobileSheet" || stateName === "portal") {
+              initializeMenu({ announce: true });
+            } else {
+              applyItemStates();
+              setStatus("Demo state updated. Open the command menu to inspect the change.");
+            }
+          });
+        });
+
+        mobileQuery?.addEventListener?.("change", () => {
+          updateStateSummary();
+          initializeMenu();
+        });
+
+        startWalkthroughButton?.addEventListener("click", () => {
+          setWalkthroughStep("trigger", "Focus moved to the trigger. Press Enter, Space, or ArrowDown.");
+          trigger?.focus();
+        });
+
+        trigger?.addEventListener("focus", () => {
+          setWalkthroughStep("trigger", "The trigger exposes aria-haspopup and aria-expanded.");
+        });
+
+        document.addEventListener("focusin", (event) => {
+          const item = getCommandItem(event.target);
+
+          if (!itemBelongsToDemo(item)) {
+            return;
+          }
+
+          if (item.closest("[data-command-submenu]")) {
+            setWalkthroughStep("submenu", "Focus is inside the submenu. ArrowLeft returns to the parent item.");
+          } else {
+            setWalkthroughStep("move", "Use ArrowUp, ArrowDown, Home, End, or type first letters to move.");
+          }
+
+          if (item?.getAttribute("aria-disabled") === "true") {
+            setStatus(item.dataset.disabledReason || "That command is unavailable right now.");
+          } else if (item?.getAttribute("aria-busy") === "true") {
+            setStatus("Add files is busy. Turn off Loading command to activate it.");
+          }
+        });
+
+        root.addEventListener(COMMAND_MENU_BUTTON_EVENTS.open, () => {
+          setWalkthroughStep("open", "The menu opened and focus moved to the first available command.");
+          setStatus(`Menu opened. ${describeLayerMode()}`);
+        });
+
+        root.addEventListener(COMMAND_MENU_BUTTON_EVENTS.close, () => {
+          setWalkthroughStep("close", "The menu closed. Escape restores focus to the trigger.");
+          setStatus("Menu closed.");
+        });
+
+        root.addEventListener(COMMAND_MENU_BUTTON_EVENTS.submenuOpen, () => {
+          setWalkthroughStep("submenu", "The one-level submenu opened. Press ArrowLeft or Escape to leave it.");
+          setStatus("Template submenu opened.");
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#live-demo">Skip to live demo</a>
+
+    <main class="demo-page">
+      <header class="demo-header">
+        <div class="demo-container demo-header__content">
+          <p class="demo-eyebrow">Plugin example</p>
+          <h1>A11y Command Menu Button</h1>
+          <p class="demo-header__intro">
+            A compact command menu for application actions that need real buttons, roving focus, disabled states,
+            one-level submenus, optional typeahead, and predictable focus restoration.
+          </p>
+          <div class="demo-actions" aria-label="Page sections">
+            <a class="demo-link-button" href="#live-demo">Open live demo</a>
+            <a class="demo-link-button demo-link-button--secondary" href="#usage">Usage</a>
+            <a class="demo-link-button demo-link-button--secondary" href="#accessibility">Accessibility</a>
+          </div>
+
+          <dl class="demo-facts" aria-label="Package facts">
+            <div>
+              <dt>Package</dt>
+              <dd><code>a11y-command-menu-button</code></dd>
+            </div>
+            <div>
+              <dt>Pattern</dt>
+              <dd>Menu button</dd>
+            </div>
+            <div>
+              <dt>Runtime</dt>
+              <dd>Vanilla TypeScript</dd>
+            </div>
+            <div>
+              <dt>Dependencies</dt>
+              <dd>None</dd>
+            </div>
+          </dl>
+        </div>
+      </header>
+
+      <section class="demo-section" aria-labelledby="scenario-title">
+        <div class="demo-container">
+          <div class="demo-section__header">
+            <p class="demo-section__eyebrow">Scenario</p>
+            <h2 id="scenario-title">Compose actions without leaving the field.</h2>
+            <p>
+              A support workspace needs a plus button beside a note field. Agents can upload files, insert saved
+              templates, extract text when attachments are available, and understand unavailable actions before
+              trying to activate them.
+            </p>
+          </div>
+
+          <ul class="demo-list">
+            <li>Open the menu from the plus button with pointer, touch, <kbd>Enter</kbd>, <kbd>Space</kbd>, or <kbd>ArrowDown</kbd>.</li>
+            <li>Move between commands with arrow keys, <kbd>Home</kbd>, <kbd>End</kbd>, or optional typeahead.</li>
+            <li>Open the Templates submenu with <kbd>ArrowRight</kbd> and return with <kbd>ArrowLeft</kbd>.</li>
+            <li>Use the state playground to inspect disabled, busy, mobile sheet, and portal modes.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="demo-section" id="live-demo" aria-labelledby="live-demo-title">
+        <div class="demo-container">
+          <div class="demo-section__header">
+            <p class="demo-section__eyebrow">Live demo</p>
+            <h2 id="live-demo-title">State playground and command menu</h2>
+            <p>
+              The controls beside the example only change demo markup and initialization options. They do not add
+              package behavior.
+            </p>
+          </div>
+
+          <div class="demo-stage">
+            <div class="demo-preview">
+              <div class="demo-preview__surface">
+                <div class="demo-composer-label">
+                  <strong>Support note</strong>
+                  <span>
+                    Add context to the customer timeline. The command menu keeps compact actions close to the
+                    text field while preserving keyboard access.
+                  </span>
+                </div>
+
+                <div class="a11y-command-menu-button" data-command-menu>
+                  <div class="demo-composer" role="group" aria-label="Support note composer with command menu">
+                    <button
+                      id="composer-command-trigger"
+                      type="button"
+                      class="a11y-command-menu-button__trigger"
+                      data-command-trigger
+                      aria-haspopup="menu"
+                      aria-expanded="false"
+                      aria-controls="composer-command-menu"
+                      aria-label="Open support note command menu"
+                      aria-describedby="command-menu-instructions command-menu-state-summary"
+                    >
+                      <span aria-hidden="true">+</span>
+                    </button>
+
+                    <label class="sr-only" for="demo-message-input">Support note draft</label>
+                    <input
+                      id="demo-message-input"
+                      class="demo-composer__input"
+                      type="text"
+                      autocomplete="off"
+                      placeholder="Write a note or add a command"
+                    />
+                  </div>
+
+                  <p id="command-menu-instructions" class="sr-only">
+                    Open the menu, use arrow keys to move, type first letters to jump, and press Escape to close.
+                  </p>
+
+                  <p
+                    id="command-menu-status"
+                    class="demo-status-line"
+                    role="status"
+                    aria-live="polite"
+                    data-command-status-message
+                  >
+                    Choose an action from the command menu.
+                  </p>
+
+                  <div
+                    id="composer-command-menu"
+                    class="a11y-command-menu-button__panel"
+                    data-command-menu-panel
+                    role="menu"
+                    aria-labelledby="composer-command-trigger"
+                    hidden
+                  >
+                    <ul class="a11y-command-menu-button__list" role="none">
+                      <li role="none">
+                        <button
+                          type="button"
+                          class="a11y-command-menu-button__item"
+                          data-command-item
+                          data-command-id="add-files"
+                          data-command-announcement="Add files activated."
+                          data-command-loading-announcement="Add files is busy. Turn off Loading command to activate it."
+                          role="menuitem"
+                        >
+                          <span class="a11y-command-menu-button__item-icon" aria-hidden="true">U</span>
+                          <span class="a11y-command-menu-button__item-content">
+                            <span class="a11y-command-menu-button__item-label">Add files</span>
+                            <span class="a11y-command-menu-button__item-meta" data-upload-meta>
+                              Upload a local asset into the composer
+                            </span>
+                          </span>
+                          <span class="a11y-command-menu-button__shortcut" aria-hidden="true">U</span>
+                        </button>
+                      </li>
+
+                      <li role="none">
+                        <button
+                          type="button"
+                          class="a11y-command-menu-button__item"
+                          data-command-item
+                          data-command-id="generate-summary"
+                          data-command-announcement="Generate summary activated."
+                          role="menuitem"
+                        >
+                          <span class="a11y-command-menu-button__item-icon" aria-hidden="true">S</span>
+                          <span class="a11y-command-menu-button__item-content">
+                            <span class="a11y-command-menu-button__item-label">Generate summary</span>
+                            <span class="a11y-command-menu-button__item-meta">Draft a short case summary</span>
+                          </span>
+                        </button>
+                      </li>
+
+                      <li role="none">
+                        <button
+                          id="template-submenu-trigger"
+                          type="button"
+                          class="a11y-command-menu-button__item"
+                          data-command-item
+                          data-command-submenu-trigger
+                          data-command-id="insert-template"
+                          data-command-disabled-announcement="Templates are unavailable during workspace sync. Turn off Disabled submenu to try them."
+                          role="menuitem"
+                          aria-haspopup="menu"
+                          aria-expanded="false"
+                          aria-controls="template-submenu"
+                        >
+                          <span class="a11y-command-menu-button__item-icon" aria-hidden="true">T</span>
+                          <span class="a11y-command-menu-button__item-content">
+                            <span class="a11y-command-menu-button__item-label">Insert template</span>
+                            <span class="a11y-command-menu-button__item-meta" data-template-meta>
+                              Open a one-level submenu
+                            </span>
+                          </span>
+                          <span class="a11y-command-menu-button__item-arrow" aria-hidden="true">&gt;</span>
+                        </button>
+
+                        <div
+                          id="template-submenu"
+                          class="a11y-command-menu-button__submenu"
+                          data-command-submenu
+                          role="menu"
+                          aria-labelledby="template-submenu-trigger"
+                          hidden
+                        >
+                          <ul class="a11y-command-menu-button__list" role="none">
+                            <li role="none">
+                              <button
+                                type="button"
+                                class="a11y-command-menu-button__item"
+                                data-command-item
+                                data-command-id="template-delay"
+                                data-command-announcement="Delay update template activated."
+                                role="menuitem"
+                              >
+                                <span class="a11y-command-menu-button__item-content">
+                                  <span class="a11y-command-menu-button__item-label">Delay update</span>
+                                  <span class="a11y-command-menu-button__item-meta">Set expectations calmly</span>
+                                </span>
+                              </button>
+                            </li>
+                            <li role="none">
+                              <button
+                                type="button"
+                                class="a11y-command-menu-button__item"
+                                data-command-item
+                                data-command-id="template-handoff"
+                                data-command-announcement="Team handoff template activated."
+                                role="menuitem"
+                              >
+                                <span class="a11y-command-menu-button__item-content">
+                                  <span class="a11y-command-menu-button__item-label">Team handoff</span>
+                                  <span class="a11y-command-menu-button__item-meta">Add next-owner context</span>
+                                </span>
+                              </button>
+                            </li>
+                            <li role="none">
+                              <button
+                                type="button"
+                                class="a11y-command-menu-button__item"
+                                data-command-item
+                                data-command-id="template-qa"
+                                data-command-announcement="QA checklist template activated."
+                                role="menuitem"
+                              >
+                                <span class="a11y-command-menu-button__item-content">
+                                  <span class="a11y-command-menu-button__item-label">QA checklist</span>
+                                  <span class="a11y-command-menu-button__item-meta">Add verification steps</span>
+                                </span>
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
+                      </li>
+
+                      <li class="a11y-command-menu-button__separator" role="none"></li>
+
+                      <li role="none">
+                        <button
+                          type="button"
+                          class="a11y-command-menu-button__item"
+                          data-command-item
+                          data-command-id="extract-text"
+                          data-command-disabled-announcement="Extract text needs an uploaded image or PDF. Turn off Disabled command to test it in this demo."
+                          data-disabled-reason="Extract text needs an uploaded image or PDF. Turn off Disabled command to test it in this demo."
+                          role="menuitem"
+                          aria-disabled="true"
+                        >
+                          <span class="a11y-command-menu-button__item-icon" aria-hidden="true">E</span>
+                          <span class="a11y-command-menu-button__item-content">
+                            <span class="a11y-command-menu-button__item-label">Extract text</span>
+                            <span class="a11y-command-menu-button__item-meta" data-extract-meta>
+                              Requires a file first
+                            </span>
+                          </span>
+                        </button>
+                      </li>
+
+                      <li role="none">
+                        <a
+                          class="a11y-command-menu-button__item"
+                          data-command-item
+                          data-command-id="open-case"
+                          data-command-announcement="Opening usage notes."
+                          href="#usage"
+                          role="menuitem"
+                        >
+                          <span class="a11y-command-menu-button__item-icon" aria-hidden="true">O</span>
+                          <span class="a11y-command-menu-button__item-content">
+                            <span class="a11y-command-menu-button__item-label">Open usage notes</span>
+                            <span class="a11y-command-menu-button__item-meta">Jump to copyable setup</span>
+                          </span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <aside class="demo-panel" aria-labelledby="state-playground-title">
+              <div class="demo-section__header">
+                <p class="demo-section__eyebrow">State playground</p>
+                <h2 id="state-playground-title">Toggle demo states</h2>
+                <p id="state-playground-help">
+                  These controls update attributes or reinitialize this demo instance with different options.
+                </p>
+              </div>
+
+              <form class="demo-state-grid" aria-describedby="state-playground-help">
+                <label class="demo-toggle">
+                  <input type="checkbox" data-state-control="disableExtract" checked />
+                  <span>
+                    <strong>Disabled command</strong>
+                    <span>Sets <code>aria-disabled="true"</code> on Extract text.</span>
+                  </span>
+                </label>
+
+                <label class="demo-toggle">
+                  <input type="checkbox" data-state-control="loadingUpload" />
+                  <span>
+                    <strong>Loading command</strong>
+                    <span>Marks Add files busy with <code>aria-busy="true"</code>.</span>
+                  </span>
+                </label>
+
+                <label class="demo-toggle">
+                  <input type="checkbox" data-state-control="disableSubmenu" />
+                  <span>
+                    <strong>Disabled submenu</strong>
+                    <span>Prevents the one-level submenu from opening.</span>
+                  </span>
+                </label>
+
+                <label class="demo-toggle">
+                  <input type="checkbox" data-state-control="mobileSheet" checked />
+                  <span>
+                    <strong>Mobile sheet mode</strong>
+                    <span>Uses the package sheet option below 40rem.</span>
+                  </span>
+                </label>
+
+                <label class="demo-toggle">
+                  <input type="checkbox" data-state-control="portal" />
+                  <span>
+                    <strong>Portal mode</strong>
+                    <span>Moves menu layers to <code>document.body</code>.</span>
+                  </span>
+                </label>
+              </form>
+
+              <div class="demo-state-output" aria-live="polite">
+                <h3>Current state</h3>
+                <p id="command-menu-state-summary" data-state-summary>
+                  Add files is ready. Template submenu can open with ArrowRight or pointer. Extract text is
+                  aria-disabled but remains keyboard discoverable.
+                </p>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-section" id="keyboard" aria-labelledby="keyboard-title">
+        <div class="demo-container">
+          <div class="demo-walkthrough">
+            <div class="demo-panel">
+              <p class="demo-section__eyebrow">Keyboard walkthrough</p>
+              <h2 id="keyboard-title">Follow the focus path</h2>
+              <p>
+                Start the walkthrough, then use the command menu with keyboard only. The active step updates from
+                demo events and focus changes.
+              </p>
+              <div class="demo-actions">
+                <button class="demo-button" type="button" data-start-walkthrough>Start walkthrough</button>
+              </div>
+              <p class="demo-status-line" role="status" aria-live="polite" data-walkthrough-status>
+                Start by moving focus to the command menu trigger.
+              </p>
+            </div>
+
+            <ol class="demo-steps">
+              <li data-walkthrough-step="trigger">
+                <span class="demo-step-number" aria-hidden="true">1</span>
+                <p><strong>Reach the trigger</strong> Tab to the plus button. It has a usable accessible name.</p>
+              </li>
+              <li data-walkthrough-step="open">
+                <span class="demo-step-number" aria-hidden="true">2</span>
+                <p><strong>Open the menu</strong> Press <kbd>Enter</kbd>, <kbd>Space</kbd>, <kbd>ArrowDown</kbd>, or <kbd>ArrowUp</kbd>.</p>
+              </li>
+              <li data-walkthrough-step="move">
+                <span class="demo-step-number" aria-hidden="true">3</span>
+                <p><strong>Move between items</strong> Use arrows, <kbd>Home</kbd>, <kbd>End</kbd>, or type the first letters.</p>
+              </li>
+              <li data-walkthrough-step="submenu">
+                <span class="demo-step-number" aria-hidden="true">4</span>
+                <p><strong>Enter and leave submenu</strong> Use <kbd>ArrowRight</kbd> to open Templates and <kbd>ArrowLeft</kbd> to return.</p>
+              </li>
+              <li data-walkthrough-step="close">
+                <span class="demo-step-number" aria-hidden="true">5</span>
+                <p><strong>Close and restore focus</strong> Press <kbd>Escape</kbd>. Focus returns to the opener by default.</p>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-section" id="usage" aria-labelledby="usage-title">
+        <div class="demo-container">
+          <div class="demo-section__header">
+            <p class="demo-section__eyebrow">Developer notes</p>
+            <h2 id="usage-title">Copy the markup and initialization path</h2>
+            <p>
+              Import the package CSS, provide semantic menu markup, and initialize the root element. The demo uses
+              the same public selectors as the README.
+            </p>
+          </div>
+
+          <div class="demo-code-grid">
+            <article class="demo-doc">
+              <h3>Install</h3>
+              <pre><code>npm install a11y-command-menu-button</code></pre>
+            </article>
+
+            <article class="demo-doc">
+              <h3>JavaScript</h3>
+              <pre><code>import { createCommandMenuButton } from "a11y-command-menu-button";
+import "a11y-command-menu-button/styles.css";
+
+const root = document.querySelector("[data-command-menu]");
+
+if (root instanceof HTMLElement) {
+  createCommandMenuButton(root, {
+    hoverSubmenus: true,
+    mobileMode: "sheet",
+    portal: false,
+    typeahead: true
+  });
+}</code></pre>
+            </article>
+
+            <article class="demo-doc">
+              <h3>Shortcut labels</h3>
+              <p>
+                The package stylesheet includes a shortcut label class for visual hints. The label does not register a
+                global keyboard shortcut; keep that routing in the host app so editable fields, platform conventions,
+                and user settings can be respected.
+              </p>
+              <pre><code>&lt;button
+  class="a11y-command-menu-button__item"
+  data-command-item
+  data-command-id="add-files"
+  type="button"
+&gt;
+  &lt;span class="a11y-command-menu-button__item-label"&gt;Add files&lt;/span&gt;
+  &lt;span class="a11y-command-menu-button__shortcut" aria-hidden="true"&gt;U&lt;/span&gt;
+&lt;/button&gt;</code></pre>
+            </article>
+          </div>
+
+          <div class="demo-section" aria-labelledby="markup-title">
+            <div class="demo-section__header">
+              <h3 id="markup-title">Minimum markup</h3>
+              <p>Use a real button for the trigger and real buttons or links for commands.</p>
+            </div>
+            <pre><code>&lt;div class="a11y-command-menu-button" data-command-menu&gt;
+  &lt;button
+    type="button"
+    class="a11y-command-menu-button__trigger"
+    data-command-trigger
+    aria-label="Open command menu"
+    aria-controls="command-menu"
+  &gt;
+    &lt;span aria-hidden="true"&gt;+&lt;/span&gt;
+  &lt;/button&gt;
+
+  &lt;div id="command-menu" class="a11y-command-menu-button__panel" data-command-menu-panel hidden&gt;
+    &lt;button class="a11y-command-menu-button__item" data-command-item data-command-id="add-files"&gt;
+      Add files
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <div class="demo-table-wrap" aria-labelledby="options-title">
+            <table>
+              <caption class="sr-only" id="options-title">
+                Public options used by this demo
+              </caption>
+              <thead>
+                <tr>
+                  <th>Option</th>
+                  <th>Type</th>
+                  <th>Demo value</th>
+                  <th>Purpose</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>typeahead</code></td>
+                  <td><code>boolean</code></td>
+                  <td><code>true</code></td>
+                  <td>Lets users type the first letters of enabled commands.</td>
+                </tr>
+                <tr>
+                  <td><code>hoverSubmenus</code></td>
+                  <td><code>boolean</code></td>
+                  <td><code>true</code></td>
+                  <td>Allows pointer hover to open one-level submenus.</td>
+                </tr>
+                <tr>
+                  <td><code>mobileMode</code></td>
+                  <td><code>"sheet" | "menu"</code></td>
+                  <td><code>"sheet"</code></td>
+                  <td>Uses bottom-sheet placement below the package mobile breakpoint.</td>
+                </tr>
+                <tr>
+                  <td><code>portal</code></td>
+                  <td><code>boolean</code></td>
+                  <td>Playground controlled</td>
+                  <td>Moves menu and submenu layers to <code>document.body</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-section" id="accessibility" aria-labelledby="accessibility-title">
+        <div class="demo-container">
+          <div class="demo-section__header">
+            <p class="demo-section__eyebrow">Accessibility behavior</p>
+            <h2 id="accessibility-title">What this example is designed to expose</h2>
+            <p>
+              This demo documents expected behavior from the plugin and sample markup. Test the final integration
+              with your target assistive technologies and browser matrix.
+            </p>
+          </div>
+
+          <div class="demo-doc-grid">
+            <article class="demo-doc">
+              <h3>Semantics and focus</h3>
+              <ul class="demo-list">
+                <li>The trigger is a real <code>&lt;button&gt;</code> with a non-visual plus icon and an accessible name.</li>
+                <li>The plugin sets <code>aria-expanded</code>, <code>aria-controls</code>, <code>role="menu"</code>, and <code>role="menuitem"</code>.</li>
+                <li>Arrow navigation uses roving <code>tabindex</code>; <kbd>Tab</kbd> exits and closes the menu.</li>
+                <li><kbd>Escape</kbd> closes the menu and restores focus to the trigger by default.</li>
+              </ul>
+            </article>
+
+            <article class="demo-doc">
+              <h3>States and announcements</h3>
+              <ul class="demo-list">
+                <li><code>aria-disabled="true"</code> commands remain discoverable but dispatch a disabled-command event.</li>
+                <li><code>aria-busy="true"</code> or <code>data-command-loading</code> remains keyboard discoverable but prevents command activation while busy.</li>
+                <li>Enabled link commands retain native navigation; <kbd>Tab</kbd> and <kbd>Shift+Tab</kbd> close the menu and continue around the trigger.</li>
+                <li>Portal mode preserves the component theme by copying public custom properties to moved layers.</li>
+                <li>A visible polite status region reports selections, disabled reasons, and playground changes.</li>
+                <li>Default CSS respects reduced motion and includes forced-colors support for menu layers.</li>
+              </ul>
+            </article>
+
+            <article class="demo-doc">
+              <h3>Command IDs and event privacy</h3>
+              <ul class="demo-list">
+                <li><code>data-command-id</code> values can reveal user intent when forwarded to analytics or logs.</li>
+                <li>Use stable, non-sensitive IDs and avoid embedding document names, customer names, or free text.</li>
+                <li>When tracking command events, send grouped or redacted values instead of raw labels or full event payloads.</li>
+              </ul>
+            </article>
+
+            <article class="demo-doc">
+              <h3>Limitations</h3>
+              <ul class="demo-list">
+                <li>The plugin does not generate menu markup; integrations must provide semantic HTML.</li>
+                <li>Only one submenu level is supported.</li>
+                <li>The menu pattern is intended for compact application commands, not long navigation lists.</li>
+                <li>Screen reader output depends on the final labels, roles, states, and browser/AT pairing.</li>
+              </ul>
+            </article>
+
+            <article class="demo-doc">
+              <h3>Selectors used here</h3>
+              <ul class="demo-list">
+                <li><code>[data-command-menu]</code> for the root.</li>
+                <li><code>[data-command-trigger]</code> for the trigger button.</li>
+                <li><code>[data-command-menu-panel]</code> for the menu layer.</li>
+                <li><code>[data-command-item]</code>, <code>[data-command-submenu-trigger]</code>, and <code>[data-command-submenu]</code> for commands and submenus.</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="demo-table-wrap" aria-labelledby="submenu-limits-title">
+            <table>
+              <caption id="submenu-limits-title">
+                One-level submenu support and integration boundaries
+              </caption>
+              <thead>
+                <tr>
+                  <th>Pattern</th>
+                  <th>Support</th>
+                  <th>Runtime or host responsibility</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Top-level command opens one submenu</td>
+                  <td>Supported</td>
+                  <td>The plugin manages focus, <code>aria-expanded</code>, placement, and close behavior.</td>
+                </tr>
+                <tr>
+                  <td>Submenu nested inside another submenu</td>
+                  <td>Unsupported</td>
+                  <td>The runtime logs a warning when nested <code>data-command-submenu</code> elements are detected.</td>
+                </tr>
+                <tr>
+                  <td>Deep command hierarchy</td>
+                  <td>Host-owned design decision</td>
+                  <td>Flatten commands, split groups, or use a larger command palette/dialog pattern instead.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="demo-footer" data-demo-footer>
+      <div class="demo-container demo-footer__inner">
+        <div class="demo-footer__brand">
+          <p class="demo-footer__eyebrow">Accessibility plugin demo</p>
+          <p class="demo-footer__credit">
+            <span class="demo-footer__plugin">A11y Command Menu Button</span>
+            <span class="demo-footer__separator" aria-hidden="true">&middot;</span>
+            Built by
+            <a class="demo-footer__link" href="https://github.com/vmitsaras/">Vasileios Mitsaras</a>
+          </p>
+          <p class="demo-footer__meta">
+            <span>a11y-command-menu-button</span>
+            <span class="demo-footer__separator" aria-hidden="true">&middot;</span>
+            <span>MIT License</span>
+          </p>
+        </div>
+
+        <nav class="demo-footer__nav" aria-label="Project links">
+          <ul class="demo-footer__links">
+            <li class="demo-footer__item">
+              <a class="demo-footer__link" href="https://github.com/vmitsaras/a11y-command-menu-button">GitHub repository</a>
+            </li>
+            <li class="demo-footer__item">
+              <a class="demo-footer__link" href="https://www.npmjs.com/package/a11y-command-menu-button">npm package</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

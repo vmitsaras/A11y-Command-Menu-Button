@@ -1,0 +1,76 @@
+{
+  "name": "a11y-command-menu-button",
+  "version": "1.0.0",
+  "description": "Accessible command menu button behavior for compact application menus.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./checkable": {
+      "types": "./dist/checkable.d.ts",
+      "import": "./dist/checkable.js"
+    },
+    "./docs": {
+      "types": "./dist/docs.d.ts",
+      "import": "./dist/docs.js"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "ACCESSIBILITY_TESTING.md",
+    "WCAG_EVIDENCE.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "copy:assets": "node -e \"const fs = require('node:fs'); if (fs.existsSync('src/styles.css')) { fs.mkdirSync('dist', { recursive: true }); fs.copyFileSync('src/styles.css', 'dist/styles.css'); }\"",
+    "build:dist": "npm run clean && tsdown --config tsdown.config.ts && npm run copy:assets",
+    "pages:generate": "node scripts/build-pages.mjs",
+    "pages:build": "npm run build:dist && npm run pages:generate",
+    "build": "npm run pages:build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "pack:check": "npm pack --dry-run --cache ./.npm-cache",
+    "prepack": "npm run build:dist",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "npm run test && npm run typecheck && npm run build && changeset publish"
+  },
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "command-menu",
+    "menu-button",
+    "keyboard-navigation",
+    "typescript"
+  ],
+  "author": "Vasilis Mitsaras",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vmitsaras/a11y-command-menu-button.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vmitsaras/a11y-command-menu-button/issues"
+  },
+  "homepage": "https://github.com/vmitsaras/a11y-command-menu-button#readme",
+  "devDependencies": {
+    "@changesets/cli": "^2.31.0",
+    "happy-dom": "^20.10.6",
+    "tsdown": "^0.22.4",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.10"
+  }
+}
